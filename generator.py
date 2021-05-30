@@ -30,9 +30,16 @@ PER_CHARA_EXCLUDE_EVENTS = {
 }
 
 PERMITTED_DUPLICATED_EVENTS = {
+    # 理事長. One has choices, the other one doesn't. We don't care and just anyway show.
     ('上々の面構えッ！', None): {400001024, 400001037},
-    ('アイツの存在', 1009): {501009115, 501009413},  # ダイワスカーレット
-    ('宝塚記念の後に・キーワード②', 1007): {501007309, 501007310, 501007423, 501007424},  # ゴルドシープ
+
+    # ダイワスカーレット. One for ☆2 and one for ☆3.
+    ('アイツの存在', 1009): {501009115, 501009413},
+
+    # ゴルドシープ. ☆2 vs ☆3, multiplied by one with choice (宝塚二連覇) vs doesn't. Don't care and anyway show.
+    ('宝塚記念の後に・キーワード②', 1007): {501007309, 501007310, 501007423, 501007424},
+
+    # ナリタブライアン. One with choices and one doesn't. Don't care and anyway show.
     ('岐', 1016): {501016121, 501016409},  # ナリタブライアン
 }
 
