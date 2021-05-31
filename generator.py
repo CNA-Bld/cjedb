@@ -180,7 +180,7 @@ text_formatter = lambda text: text.replace('[br]', '\n').replace('<hr>', '\n')
 
 def convert_to_proto(events: dict) -> cjedb_pb2.Database:
     db = cjedb_pb2.Database()
-    for k, v in events.items():
+    for k, v in sorted(events.items()):
         e = cjedb_pb2.Event()
         e.story_id = k
         for choice in v['choices']:
@@ -205,7 +205,7 @@ def main():
     db = convert_to_proto(events)
 
     with open(args.output, 'w') as f:
-        json.dump(json_format.MessageToDict(db), f, ensure_ascii=False)
+        json.dump(json_format.MessageToDict(db), f, ensure_ascii=False, indent=2)
 
 
 if __name__ == '__main__':
