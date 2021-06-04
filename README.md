@@ -3,7 +3,8 @@
 cjedb provides additional data to [EXNOA-CarrotJuicer](https://github.com/CNA-Bld/EXNOA-CarrotJuicer) for additional
 functionalities.
 
-If you are a user of EXNOA-CarrotJuicer, please just put [cjedb.json](cjedb.json) into `umamusume.exe`'s directory.
+If you are a user of EXNOA-CarrotJuicer, please just
+put [cjedb.json](https://github.com/CNA-Bld/cjedb/raw/master/cjedb.json) into `umamusume.exe`'s directory.
 
 ## Schema
 
@@ -35,5 +36,6 @@ a warning message. Known exceptions:
   brain. A full list is in `EXCLUDED_EVENT_NAMES`.
 * General events that are different for characters (currently only ダンスレッスン) are hardcoded manually with some safety
   checks against `master.mdb`.
+* Some character specific events are also excluded. See `PER_CHARA_EXCLUDE_EVENTS`.
 * Some events have several copies. See `PERMITTED_DUPLICATED_EVENTS` for details.
 * Finally, `KNOWN_OVERRIDES` is the list of events where the name cannot be fuzzy matched, so they got manually mapped.
