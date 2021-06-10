@@ -51,21 +51,13 @@ KNOWN_OVERRIDES = {
     ('えっアタシのバイト…やばすぎ？', 1007): 'えっアタシのバイト……ヤバすぎ？',
     ('挑め、”宿命”', 1008): '挑め、“宿命”',
     ('楽しめ！一番！', 1009): '楽しめ！　1番！',
-    ('もう１度、決意を', 1014): 'もう1度、決意を',
     ('"女帝"と"帝王"', 1018): '“女帝”と“帝王”',
     ('"女帝"と"皇帝"', 1018): '“女帝”と“皇帝”',
-    ('目指せ！大人のちゃんこ鍋☆', 1024): '目指せ！　大人のちゃんこ鍋☆',
     ('この壁を超えてゆけ！', 1035): 'この壁を越えてゆけ！',
-    ('ラスボスはスペ', 1052): 'ラスボスはスぺ',
-    ('食い倒れ！七福神グルメめぐり', 1056): '食い倒れ！　七福神グルメめぐり',
+    ('ラスボスはスペ', 1052): 'ラスボスはスぺ',  # ペ in master.mdb is ひらがな...
     ('"覇王"として', 1015): '“覇王”として',
-    ('レイニーパワフル', 1010): 'レイニー・パワフル！',
-    ('大切な方と一緒にッ！', 1041): '大切な方と、一緒にッ！',
     ('かっくいいね！', 1052): 'かっくいぃね！',
-    ('開運！ラッキーテレフォン', 1056): '開運！　ラッキーテレフォン',
-    ('ピンチの後は…？', 1056): 'ピンチの後は……？',
     ('麗姿、瞳に焼き付いて', 1018): '麗姿、瞳に焼きついて',
-    ('レイニーピックアップ', 1010): 'レイニー・ピックアップ！',
     ('すべてはーーーのため', 1038): 'すべては――のため',
     ('You’re My Sunshine☆', 1024): 'You\'re My Sunshine☆',
     ('With My Whole Heart!', 1024): 'With My Whole Heart！',
@@ -100,13 +92,15 @@ def read_chara_names(cursor: sqlite3.Cursor) -> dict[str, int]:
     return {row[1]: row[0] for row in cursor.fetchall()}
 
 
-def try_match_event(cursor: sqlite3.Cursor, event_name: str, chara_id: Optional[int]) -> list[int]:
+def try_match_event(cursor: sqlite3.Cursor, event_name: str, chara_id: Optional[int], unused_known_overrides: set) \
+        -> list[int]:
     event_name = event_name.replace('･', '・').replace('~', '～')  # Currently no events use these 2 replaced chars
     for suffix in EVENT_NAME_SUFFIX_TO_REMOVE:
         event_name = event_name.removesuffix(suffix)
 
     t = (event_name, chara_id)
     if t in KNOWN_OVERRIDES:
+        unused_known_overrides.discard(t)
         event_name = KNOWN_OVERRIDES[t]
         t = (event_name, chara_id)
 
@@ -150,6 +144,7 @@ def try_match_event(cursor: sqlite3.Cursor, event_name: str, chara_id: Optional[
 def match_events(cursor: sqlite3.Cursor, gw_data):
     chara_names = read_chara_names(cursor)
 
+    unused_known_overrides = set(KNOWN_OVERRIDES.keys())
     result = {}
 
     for row in gw_data:
@@ -167,13 +162,16 @@ def match_events(cursor: sqlite3.Cursor, gw_data):
         if event_name in EXCLUDED_EVENT_NAMES or (event_name, chara_id) in PER_CHARA_EXCLUDE_EVENTS:
             continue
 
-        story_ids = try_match_event(cursor, event_name, chara_id)
+        story_ids = try_match_event(cursor, event_name, chara_id, unused_known_overrides)
         for story_id in story_ids:
             if story_id in result:
                 # Because upstream uses separate entries for support cards R vs SR vs SSR.
                 # For now there is no case where the choices are different than each other, so just ignore.
                 pass
             result[story_id] = row
+
+    if len(unused_known_overrides) > 0:
+        logging.warning('Unused KNOWN_OVERRIDES: %s', unused_known_overrides)
 
     return result
 
