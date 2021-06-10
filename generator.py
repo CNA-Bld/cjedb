@@ -2,6 +2,7 @@ import argparse
 import ast
 import json
 import logging
+import os
 import re
 import sqlite3
 import unicodedata
@@ -20,7 +21,7 @@ EXCLUDED_EVENT_CHARA_NAMES = {'URA'}
 
 EXCLUDED_EVENT_NAMES = {'追加の自主トレ', '夏合宿（2年目）にて', '夏合宿(2年目)にて', '初詣', '新年の抱負',
                         'お大事に！', '無茶は厳禁！',
-                        'レース勝利！(1着)', 'レース入着(2~5着)', 'レース敗北(6着以下)', 'レース勝利！', 'レース入着',
+                        'レース勝利！(1着)', 'レース入着(2~5着)', 'レース敗北(6着以下)', 'レース勝利！', 'レース入着', 'レース敗北',
                         'あんし～ん笹針師、参☆上'}
 
 EVENT_NAME_SUFFIX_TO_REMOVE = {'（お出かけ2）', '（お出かけ3）'}
@@ -120,7 +121,8 @@ def try_match_event(cursor: sqlite3.Cursor, event_name: str, chara_id: Optional[
         if len(rows) == 1:
             row = rows[0]
             if str(row[0]).startswith('50%d' % chara_id) or str(row[0]).startswith('80%d' % chara_id):
-                pass  # Chara ID matches, assume it's safe.
+                # Chara ID matches, just INFO.
+                logging.info("Fuzzily mapped %s for chara %s to %d %s" % (event_name, chara_id, row[0], row[1]))
             else:
                 logging.warning("Fuzzily mapped %s for chara %s to %d %s" % (event_name, chara_id, row[0], row[1]))
             return [row[0]]
@@ -194,6 +196,8 @@ def convert_to_proto(events: dict) -> cjedb_pb2.Database:
 
 
 def main():
+    logging.basicConfig(level=os.environ.get('LOGLEVEL', 'WARNING').upper())
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--db_path", default="master.mdb")
     parser.add_argument("--output", default="cjedb.json")
