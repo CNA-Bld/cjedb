@@ -28,6 +28,7 @@ EVENT_NAME_SUFFIX_TO_REMOVE = {'（お出かけ2）', '（お出かけ3）'}
 
 PER_CHARA_EXCLUDE_EVENTS = {
     ('夏合宿(3年目)終了', 1007),  # ゴルシ, wrong event name, but no one else has this choice, and the choice does nothing
+    ('レース勝利', 1024),  # マヤノ, without exclamation mark at the end. Both this and the normal one appear in gallery
 }
 
 PERMITTED_DUPLICATED_EVENTS = {
