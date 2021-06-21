@@ -29,6 +29,7 @@ EVENT_NAME_SUFFIX_TO_REMOVE = {'（お出かけ2）', '（お出かけ3）'}
 PER_CHARA_EXCLUDE_EVENTS = {
     ('夏合宿(3年目)終了', 1007),  # ゴルシ, wrong event name, but no one else has this choice, and the choice does nothing
     ('レース勝利', 1024),  # マヤノ, without exclamation mark at the end. Both this and the normal one appear in gallery
+    ('レース入着(2/4/5着)', 1060),  # ナイスネイチャ
 }
 
 PERMITTED_DUPLICATED_EVENTS = {
@@ -73,6 +74,7 @@ KNOWN_OVERRIDES = {
     ('"皇帝"の激励', 1017): '“皇帝”の激励',
     ('#lol #Party! #2nd', 1065): '#lol #Party!! #2nd',
     ('検証〜ネコ語は実在するのか？', 1020): '検証～ネコ語は実在するのか？',
+    ('タイマン！スケバン！勝負服！', 1012): 'タイマン！　スケバン！　勝負服！',
 }
 
 
