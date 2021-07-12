@@ -44,6 +44,9 @@ PERMITTED_DUPLICATED_EVENTS = {
 
     # ナリタブライアン. One with choices and one doesn't. Don't care and anyway show.
     ('岐', 1016): {501016121, 501016409},
+
+    # フジキセキ
+    ('第一幕　スマイル', 1005): {501005113, 501005401},
 }
 
 KNOWN_OVERRIDES = {
@@ -73,6 +76,9 @@ KNOWN_OVERRIDES = {
     ('"皇帝"の激励', 1017): '“皇帝”の激励',
     ('#lol #Party! #2nd', 1065): '#lol #Party!! #2nd',
     ('検証〜ネコ語は実在するのか？', 1020): '検証～ネコ語は実在するのか？',
+    ('＠DREAM_MAKER', 1005): '@DREAM_MAKER',
+    ('人生最大の幸運とは', 1005): '人生最大の幸福とは',
+    ('What a wonderful stage!', 1005): 'What a wonderful stage！',
 }
 
 
