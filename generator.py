@@ -30,6 +30,17 @@ PER_CHARA_EXCLUDE_EVENTS = {
     ('夏合宿(3年目)終了', 1007),  # ゴルシ, wrong event name, but no one else has this choice, and the choice does nothing
     ('レース勝利', 1024),  # マヤノ, without exclamation mark at the end. Both this and the normal one appear in gallery
     ('レース入着(2/4/5着)', 1060),  # ナイスネイチャ
+
+    # ゴールドシチー
+    ('レース勝利！(クラシック10月後半以前1着)', 1040),
+    ('レース入着(クラシック10月後半以前2~5着)', 1040),
+    ('レース敗北(クラシック10月後半以前6着以下)', 1040),
+    ('レース勝利！(クラシック11月前半以降1着)', 1040),
+    ('レース入着(クラシック11月前半以降2~5着)', 1040),
+    ('レース敗北(クラシック11月前半以降6着以下)', 1040),
+    ('レース勝利！(シニア5月前半以降1着)', 1040),
+    ('レース入着(シニア5月前半以降2~5着)', 1040),
+    ('レース敗北(シニア5月前半以降6着以下)', 1040),
 }
 
 PERMITTED_DUPLICATED_EVENTS = {
@@ -57,7 +68,6 @@ KNOWN_OVERRIDES = {
     ('楽しめ！一番！', 1009): '楽しめ！　1番！',
     ('"女帝"と"帝王"', 1018): '“女帝”と“帝王”',
     ('"女帝"と"皇帝"', 1018): '“女帝”と“皇帝”',
-    ('この壁を超えてゆけ！', 1035): 'この壁を越えてゆけ！',
     ('ラスボスはスペ', 1052): 'ラスボスはスぺ',  # ペ in master.mdb is ひらがな...
     ('"覇王"として', 1015): '“覇王”として',
     ('かっくいいね！', 1052): 'かっくいぃね！',
@@ -101,6 +111,7 @@ def read_chara_names(cursor: sqlite3.Cursor) -> dict[str, int]:
 
 def try_match_event(cursor: sqlite3.Cursor, event_name: str, chara_id: Optional[int], unused_known_overrides: set) \
         -> list[int]:
+    original_event_name = event_name
     event_name = event_name.replace('･', '・').replace('~', '～')  # Currently no events use these 2 replaced chars
     for suffix in EVENT_NAME_SUFFIX_TO_REMOVE:
         event_name = event_name.removesuffix(suffix)
@@ -123,12 +134,12 @@ def try_match_event(cursor: sqlite3.Cursor, event_name: str, chara_id: Optional[
             row = rows[0]
             if str(row[0]).startswith('50%d' % chara_id) or str(row[0]).startswith('80%d' % chara_id):
                 # Chara ID matches, just INFO.
-                logging.info("Fuzzily mapped %s for chara %s to %d %s" % (event_name, chara_id, row[0], row[1]))
+                logging.info("Fuzzily mapped %s for chara %s to %d %s" % (original_event_name, chara_id, row[0], row[1]))
             else:
-                logging.warning("Fuzzily mapped %s for chara %s to %d %s" % (event_name, chara_id, row[0], row[1]))
+                logging.warning("Fuzzily mapped %s for chara %s to %d %s" % (original_event_name, chara_id, row[0], row[1]))
             return [row[0]]
 
-        logging.warning("Unknown event %s for chara %d" % t)
+        logging.warning("Unknown event %s for chara %d" % (original_event_name, chara_id))
         return []
 
     if len(possible_story_ids) == 1:
@@ -144,7 +155,7 @@ def try_match_event(cursor: sqlite3.Cursor, event_name: str, chara_id: Optional[
         if set(possible_story_ids) == PERMITTED_DUPLICATED_EVENTS[t]:
             return possible_story_ids
 
-    logging.warning("More than 1 event for event_name: " + event_name)
+    logging.warning("More than 1 event for event_name: " + original_event_name)
     return []
 
 
