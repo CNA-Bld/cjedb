@@ -17,12 +17,13 @@ UPSTREAM_DATA_URL = 'https://gamewith-tool.s3-ap-northeast-1.amazonaws.com/uma-m
 UPSTREAM_DATA_HEADER = '''window.eventDatas['男'] = ['''
 UPSTREAM_DATA_FOOTER = '];'
 
-EXCLUDED_EVENT_CHARA_NAMES = {'URA'}
+EXCLUDED_EVENT_CHARA_NAMES = {'URA', '共通'}
 
 EXCLUDED_EVENT_NAMES = {'追加の自主トレ', '夏合宿（2年目）にて', '夏合宿(2年目)にて', '初詣', '新年の抱負',
                         'お大事に！', '無茶は厳禁！',
                         'レース勝利！(1着)', 'レース入着(2~5着)', 'レース敗北(6着以下)', 'レース勝利！', 'レース入着', 'レース敗北',
-                        'あんし～ん笹針師、参☆上'}
+                        '今度こそ負けない！',
+                        'あんし〜ん笹針師、参☆上'}
 
 EVENT_NAME_SUFFIX_TO_REMOVE = {'（お出かけ2）', '（お出かけ3）'}
 
@@ -134,12 +135,12 @@ def try_match_event(cursor: sqlite3.Cursor, event_name: str, chara_id: Optional[
             row = rows[0]
             if str(row[0]).startswith('50%d' % chara_id) or str(row[0]).startswith('80%d' % chara_id):
                 # Chara ID matches, just INFO.
-                logging.info("Fuzzily mapped %s for chara %s to %d %s" % (original_event_name, chara_id, row[0], row[1]))
+                logging.info("Fuzzily mapped %s for chara %s to %s %s" % (original_event_name, chara_id, row[0], row[1]))
             else:
-                logging.warning("Fuzzily mapped %s for chara %s to %d %s" % (original_event_name, chara_id, row[0], row[1]))
+                logging.warning("Fuzzily mapped %s for chara %s to %s %s" % (original_event_name, chara_id, row[0], row[1]))
             return [row[0]]
 
-        logging.warning("Unknown event %s for chara %d" % (original_event_name, chara_id))
+        logging.warning("Unknown event %s for chara %s" % (original_event_name, chara_id))
         return []
 
     if len(possible_story_ids) == 1:
