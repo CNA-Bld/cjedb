@@ -174,6 +174,10 @@ def match_events(cursor: sqlite3.Cursor, gw_data):
             logging.error('Detected unknown event_type: %s' % row)
 
         event_chara_name = re.sub(r'\(.+\)', "", row['n'])  # remove things like `(新衣装)`
+        m = re.search('[\u30A0-\u30FF]+', event_chara_name)
+        if m:
+            # If it contains some Katakana, just remove all non Katakana chars
+            event_chara_name = m[0]
         if event_chara_name not in chara_names and event_chara_name not in EXCLUDED_EVENT_CHARA_NAMES:
             logging.warning('Detected unknown event_chara: %s' % row)
         chara_id = chara_names.get(event_chara_name)
@@ -184,7 +188,7 @@ def match_events(cursor: sqlite3.Cursor, gw_data):
         story_ids = try_match_event(cursor, event_name, chara_id, unused_known_overrides)
         for story_id in story_ids:
             if story_id in result:
-                # Because upstream uses separate entries for support cards R vs SR vs SSR.
+                # Because upstream uses separate entries for support cards R vs SR vs SSR, or different 勝負服 of the same chara.
                 # For now there is no case where the choices are different than each other, so just ignore.
                 pass
             result[story_id] = row
