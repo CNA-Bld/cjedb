@@ -90,6 +90,8 @@ KNOWN_OVERRIDES = {
     ('＠DREAM_MAKER', 1005): '@DREAM_MAKER',
     ('人生最大の幸運とは', 1005): '人生最大の幸福とは',
     ('What a wonderful stage!', 1005): 'What a wonderful stage！',
+    ('あんしんかばん', 1058): 'あんしんカバン',
+    ('あまあま☆マズマズ☆黒魔法！', 1044): 'あまあま☆マズマズ☆黒魔法',
 }
 
 
