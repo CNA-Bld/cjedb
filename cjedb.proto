@@ -3,15 +3,16 @@ syntax = "proto2";
 package cjedb;
 
 message Database {
-  repeated Event events = 1;
+    repeated Event events = 1;
 }
 
 message Event {
-  optional int32 story_id = 1;
+    optional int32 story_id = 1;
+    optional string story_name = 3; // Name as presented by upstream. Only available when option --include_name is enabled.
 
-  message Choice {
-    optional string title = 1;
-    optional string text = 2;
-  }
-  repeated Choice choices = 2;
+    message Choice {
+        optional string title = 1;
+        optional string text = 2;
+    }
+    repeated Choice choices = 2;
 }

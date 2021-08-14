@@ -137,9 +137,11 @@ def try_match_event(cursor: sqlite3.Cursor, event_name: str, chara_id: Optional[
             row = rows[0]
             if str(row[0]).startswith('50%d' % chara_id) or str(row[0]).startswith('80%d' % chara_id):
                 # Chara ID matches, just INFO.
-                logging.info("Fuzzily mapped %s for chara %s to %s %s" % (original_event_name, chara_id, row[0], row[1]))
+                logging.info(
+                    "Fuzzily mapped %s for chara %s to %s %s" % (original_event_name, chara_id, row[0], row[1]))
             else:
-                logging.warning("Fuzzily mapped %s for chara %s to %s %s" % (original_event_name, chara_id, row[0], row[1]))
+                logging.warning(
+                    "Fuzzily mapped %s for chara %s to %s %s" % (original_event_name, chara_id, row[0], row[1]))
             return [row[0]]
 
         logging.warning("Unknown event %s for chara %s" % (original_event_name, chara_id))
@@ -204,7 +206,7 @@ def match_events(cursor: sqlite3.Cursor, gw_data):
 text_formatter = lambda text: text.replace('[br]', '\n').replace('<hr>', '\n')
 
 
-def convert_to_proto(events: dict) -> cjedb_pb2.Database:
+def convert_to_proto(events: dict, include_name: bool) -> cjedb_pb2.Database:
     db = cjedb_pb2.Database()
     for k, v in sorted(events.items()):
         e = cjedb_pb2.Event()
@@ -214,6 +216,8 @@ def convert_to_proto(events: dict) -> cjedb_pb2.Database:
             c.title = choice['n']
             c.text = text_formatter(choice['t'])
             e.choices.append(c)
+        if include_name:
+            e.story_name = v['e']
         db.events.append(e)
     return db
 
@@ -224,13 +228,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--db_path", default="master.mdb")
     parser.add_argument("--output", default="cjedb.json")
+    parser.add_argument("--include_name", action='store_true')
     args = parser.parse_args()
 
     gw_data = fetch_gw_upstream()
     cursor = open_db(args.db_path)
 
     events = match_events(cursor, gw_data)
-    db = convert_to_proto(events)
+    db = convert_to_proto(events, args.include_name)
 
     with open(args.output, 'w') as f:
         json.dump(json_format.MessageToDict(db), f, ensure_ascii=False, indent=2)

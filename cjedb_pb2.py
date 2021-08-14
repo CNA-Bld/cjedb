@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto2',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0b\x63jedb.proto\x12\x05\x63jedb\"(\n\x08\x44\x61tabase\x12\x1c\n\x06\x65vents\x18\x01 \x03(\x0b\x32\x0c.cjedb.Event\"f\n\x05\x45vent\x12\x10\n\x08story_id\x18\x01 \x01(\x05\x12$\n\x07\x63hoices\x18\x02 \x03(\x0b\x32\x13.cjedb.Event.Choice\x1a%\n\x06\x43hoice\x12\r\n\x05title\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t'
+  serialized_pb=b'\n\x0b\x63jedb.proto\x12\x05\x63jedb\"(\n\x08\x44\x61tabase\x12\x1c\n\x06\x65vents\x18\x01 \x03(\x0b\x32\x0c.cjedb.Event\"z\n\x05\x45vent\x12\x10\n\x08story_id\x18\x01 \x01(\x05\x12\x12\n\nstory_name\x18\x03 \x01(\t\x12$\n\x07\x63hoices\x18\x02 \x03(\x0b\x32\x13.cjedb.Event.Choice\x1a%\n\x06\x43hoice\x12\r\n\x05title\x18\x01 \x01(\t\x12\x0c\n\x04text\x18\x02 \x01(\t'
 )
 
 
@@ -91,8 +91,8 @@ _EVENT_CHOICE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=129,
-  serialized_end=166,
+  serialized_start=149,
+  serialized_end=186,
 )
 
 _EVENT = _descriptor.Descriptor(
@@ -111,7 +111,14 @@ _EVENT = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='choices', full_name='cjedb.Event.choices', index=1,
+      name='story_name', full_name='cjedb.Event.story_name', index=1,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='choices', full_name='cjedb.Event.choices', index=2,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -130,7 +137,7 @@ _EVENT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=64,
-  serialized_end=166,
+  serialized_end=186,
 )
 
 _DATABASE.fields_by_name['events'].message_type = _EVENT
