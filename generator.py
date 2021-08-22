@@ -92,6 +92,7 @@ KNOWN_OVERRIDES = {
     ('What a wonderful stage!', 1005): 'What a wonderful stage！',
     ('あんしんかばん', 1058): 'あんしんカバン',
     ('あまあま☆マズマズ☆黒魔法！', 1044): 'あまあま☆マズマズ☆黒魔法',
+    ('下地合ってのネイルっしょ', 1048): '下地あってのネイルっしょ',
 }
 
 
@@ -115,7 +116,8 @@ def read_chara_names(cursor: sqlite3.Cursor) -> dict[str, int]:
 def try_match_event(cursor: sqlite3.Cursor, event_name: str, chara_id: Optional[int], unused_known_overrides: set) \
         -> list[int]:
     original_event_name = event_name
-    event_name = event_name.replace('･', '・').replace('~', '～')  # Currently no events use these 2 replaced chars
+     # Currently no events use these replaced chars
+    event_name = event_name.replace('･', '・').replace('~', '～').replace('(', '（').replace(')', '）')
     for suffix in EVENT_NAME_SUFFIX_TO_REMOVE:
         event_name = event_name.removesuffix(suffix)
 
