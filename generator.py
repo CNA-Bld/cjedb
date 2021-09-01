@@ -17,13 +17,16 @@ UPSTREAM_DATA_URL = 'https://gamewith-tool.s3-ap-northeast-1.amazonaws.com/uma-m
 UPSTREAM_DATA_HEADER = '''window.eventDatas['男'] = ['''
 UPSTREAM_DATA_FOOTER = '];'
 
-EXCLUDED_EVENT_CHARA_NAMES = {'URA', '共通'}
+EXCLUDED_EVENT_CHARA_NAMES = {'共通', 'URA', 'アオハル'}
 
-EXCLUDED_EVENT_NAMES = {'追加の自主トレ', '夏合宿（2年目）にて', '夏合宿(2年目)にて', '初詣', '新年の抱負',
-                        'お大事に！', '無茶は厳禁！',
-                        'レース勝利！(1着)', 'レース入着(2~5着)', 'レース敗北(6着以下)', 'レース勝利！', 'レース入着', 'レース敗北',
-                        '今度こそ負けない！',
-                        'あんし〜ん笹針師、参☆上'}
+EXCLUDED_EVENT_NAMES = {
+    '追加の自主トレ', '夏合宿（2年目）にて', '夏合宿(2年目)にて', '初詣', '新年の抱負',
+    'お大事に！', '無茶は厳禁！',
+    'レース勝利！(1着)', 'レース入着(2~5着)', 'レース敗北(6着以下)', 'レース勝利！', 'レース入着', 'レース敗北',
+    '今度こそ負けない！',
+    'あんし〜ん笹針師、参☆上',
+    'チーム＜ファースト＞の宣戦布告', 'ついに集まったチームメンバー！', '秋川理事長のご褒美！',  # Aoharu only
+}
 
 EVENT_NAME_SUFFIX_TO_REMOVE = {'（お出かけ2）', '（お出かけ3）'}
 
