@@ -25,7 +25,7 @@ EXCLUDED_EVENT_NAMES = {
     'レース勝利！(1着)', 'レース入着(2~5着)', 'レース敗北(6着以下)', 'レース勝利！', 'レース入着', 'レース敗北',
     '今度こそ負けない！',
     'あんし〜ん笹針師、参☆上',
-    'チーム＜ファースト＞の宣戦布告', 'ついに集まったチームメンバー！', '秋川理事長のご褒美！',  # Aoharu only
+    'チーム＜ファースト＞の宣戦布告', 'ついに集まったチームメンバー！',  # Aoharu only
 }
 
 EVENT_NAME_SUFFIX_TO_REMOVE = {'（お出かけ2）', '（お出かけ3）'}
@@ -62,9 +62,19 @@ PERMITTED_DUPLICATED_EVENTS = {
 
     # フジキセキ
     ('第一幕　スマイル', 1005): {501005113, 501005401},
+
+    # Aoharu, team name
+    ('ついに集まったチームメンバー！', None): {400002204, 400002217, 400002444},
+}
+
+DUPLICATED_EVENTS_DEDUPE = {
+    # 1061 キングヘイロー, 1019 アグネスデジタル
+    ('一流の条件', 1061): ({501019116, 501061704}, [501061704]),
 }
 
 KNOWN_OVERRIDES = {
+    ('秋川理事長のご褒美！', None): 'ついに集まったチームメンバー！',  # Aoharu. Manually show the outcome during where the choice happens
+
     ('"女帝"vs."帝王"', 1003): '“女帝”vs.“帝王”',
     ('支えあいの秘訣', 1004): '支え合いの秘訣',
     ('えっアタシのバイト…やばすぎ？', 1007): 'えっアタシのバイト……ヤバすぎ？',
@@ -96,6 +106,9 @@ KNOWN_OVERRIDES = {
     ('あんしんかばん', 1058): 'あんしんカバン',
     ('下地合ってのネイルっしょ', 1048): '下地あってのネイルっしょ',
     ('奏でようWINNING!', 1002): '奏でようWINNING！',
+    ('"推し"えて、デジタル先生！', 1019): '“推し”えて、デジタル先生！',
+    ('あなたの背中を"推し"たくて……', 1019): 'あなたの背中を“推し”たくて……',
+    ('"推し"みない愛を推しに！', 1019): '“推し”みない愛を推しに！',
 }
 
 
@@ -164,6 +177,10 @@ def try_match_event(cursor: sqlite3.Cursor, event_name: str, chara_id: Optional[
     if t in PERMITTED_DUPLICATED_EVENTS:
         if set(possible_story_ids) == PERMITTED_DUPLICATED_EVENTS[t]:
             return possible_story_ids
+
+    if t in DUPLICATED_EVENTS_DEDUPE:
+        if set(possible_story_ids) == DUPLICATED_EVENTS_DEDUPE[t][0]:
+            return DUPLICATED_EVENTS_DEDUPE[t][1]
 
     logging.warning("More than 1 event for event_name: " + original_event_name)
     return []
