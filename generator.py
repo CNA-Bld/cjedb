@@ -63,6 +63,9 @@ PERMITTED_DUPLICATED_EVENTS = {
     # フジキセキ
     ('第一幕　スマイル', 1005): {501005113, 501005401},
 
+    # ファインモーション
+    ('Who Will Escort Me?', 1022): {501022118, 501022406},
+
     # Aoharu, team name
     ('ついに集まったチームメンバー！', None): {400002204, 400002217, 400002444},
 }
@@ -112,6 +115,7 @@ KNOWN_OVERRIDES = {
     ('じゃじゃウマ娘のパーティー', 1039): 'じゃじゃウマ姫のパーティー',
     ('シチーガールの今の気分♪', 1040): '“シチーガール”の今の気分♪',
     ('勝利の味ってヤツ！', 1048): '勝利の味ってヤツ!',
+    ('殿下と映画鑑賞会', 1022): '殿下と映画観賞会',
 }
 
 
@@ -185,7 +189,7 @@ def try_match_event(cursor: sqlite3.Cursor, event_name: str, chara_id: Optional[
         if set(possible_story_ids) == DUPLICATED_EVENTS_DEDUPE[t][0]:
             return DUPLICATED_EVENTS_DEDUPE[t][1]
 
-    logging.warning("More than 1 event for event_name: " + original_event_name)
+    logging.warning("More than 1 event for event_name %s for char %s" % (original_event_name, chara_id))
     return []
 
 
