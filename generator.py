@@ -73,6 +73,11 @@ PERMITTED_DUPLICATED_EVENTS = {
 DUPLICATED_EVENTS_DEDUPE = {
     # 1061 キングヘイロー, 1019 アグネスデジタル
     ('一流の条件', 1061): ({501019116, 501061704}, [501061704]),
+
+    # 1021 タマモクロス, 1024 マヤノトップガン
+    # For マヤノ, this behaves the same to the normal one and is excluded above by PER_CHARA_EXCLUDE_EVENTS
+    # For タマ, this is the special one during バ群を怖がる期間
+    ('レース勝利', 1021): ({501021734, 501024724}, [501021734]),
 }
 
 KNOWN_OVERRIDES = {
