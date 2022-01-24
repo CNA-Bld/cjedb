@@ -28,12 +28,13 @@ EXCLUDED_EVENT_NAMES = {
     'チーム＜ファースト＞の宣戦布告', 'ついに集まったチームメンバー！',  # Aoharu only
 }
 
-EVENT_NAME_SUFFIX_TO_REMOVE = {'（お出かけ2）', '（お出かけ3）'}
+EVENT_NAME_SUFFIX_TO_REMOVE = {'（お出かけ2）', '（お出かけ3）', '（Rお出かけ3）'}
 
 PER_CHARA_EXCLUDE_EVENTS = {
     ('夏合宿(3年目)終了', 1007),  # ゴルシ, wrong event name, but no one else has this choice, and the choice does nothing
     ('レース勝利', 1024),  # マヤノ, without exclamation mark at the end. Both this and the normal one appear in gallery
     ('レース入着(2/4/5着)', 1060),  # ナイスネイチャ
+    ('天皇賞(秋)の後に・空に手を', 1069),  # サクラチヨノオー, the choices explain their effect quite well.
 
     # ゴールドシチー
     ('レース勝利！(クラシック10月後半以前1着)', 1040),
@@ -117,7 +118,6 @@ KNOWN_OVERRIDES = {
     ('あなたの背中を"推し"たくて……', 1019): 'あなたの背中を“推し”たくて……',
     ('"推し"みない愛を推しに！', 1019): '“推し”みない愛を推しに！',
     ('Search  or Mommy', 1045): 'Search or Mommy',
-    ('じゃじゃウマ娘のパーティー', 1039): 'じゃじゃウマ姫のパーティー',
     ('シチーガールの今の気分♪', 1040): '“シチーガール”の今の気分♪',
     ('勝利の味ってヤツ！', 1048): '勝利の味ってヤツ!',
     ('殿下と映画鑑賞会', 1022): '殿下と映画観賞会',
