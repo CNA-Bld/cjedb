@@ -17,7 +17,7 @@ UPSTREAM_DATA_URL = 'https://gamewith-tool.s3-ap-northeast-1.amazonaws.com/uma-m
 UPSTREAM_DATA_HEADER = '''window.eventDatas['男'] = ['''
 UPSTREAM_DATA_FOOTER = '];'
 
-EXCLUDED_EVENT_CHARA_NAMES = {'共通', 'URA', 'アオハル'}
+EXCLUDED_EVENT_CHARA_NAMES = {'共通', 'URA', 'アオハル', 'クライマックス'}
 
 EXCLUDED_EVENT_NAMES = {
     '追加の自主トレ', '夏合宿（2年目）にて', '夏合宿(2年目)にて', '初詣', '新年の抱負',
@@ -66,6 +66,9 @@ PERMITTED_DUPLICATED_EVENTS = {
 
     # ファインモーション
     ('Who Will Escort Me?', 1022): {501022118, 501022406},
+
+    # メジロアルダン
+    ('道、分かたれて', 1071): {501071116, 501071404},
 
     # Aoharu, team name
     ('ついに集まったチームメンバー！', None): {400002204, 400002217, 400002444},
@@ -121,11 +124,15 @@ KNOWN_OVERRIDES = {
     ('シチーガールの今の気分♪', 1040): '“シチーガール”の今の気分♪',
     ('勝利の味ってヤツ！', 1048): '勝利の味ってヤツ!',
     ('殿下と映画鑑賞会', 1022): '殿下と映画観賞会',
+    ('言葉+……', 1033): '言葉＋……',
+    ('『全力』&『普通』ダイエット！', None): '『全力』＆『普通』ダイエット！',
 }
 
 
 def fetch_gw_upstream():
-    c = requests.get(UPSTREAM_DATA_URL).text
+    r = requests.get(UPSTREAM_DATA_URL)
+    r.encoding = 'utf-8'
+    c = r.text
     c = c[c.find(UPSTREAM_DATA_HEADER) + len(UPSTREAM_DATA_HEADER) + 1:c.find(UPSTREAM_DATA_FOOTER)]
     return ast.literal_eval('[' + c + ']')  # A bad hack because Python happens to accept this :(
 
