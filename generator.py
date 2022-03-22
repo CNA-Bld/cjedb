@@ -18,6 +18,7 @@ UPSTREAM_DATA_HEADER = '''window.eventDatas['男'] = ['''
 UPSTREAM_DATA_FOOTER = '];'
 
 EXCLUDED_EVENT_CHARA_NAMES = {'共通', 'URA', 'アオハル', 'クライマックス'}
+LOW_PRIORITY_CHARA_NAMES = {'チーム＜シリウス＞'}
 
 EXCLUDED_EVENT_NAMES = {
     '追加の自主トレ', '夏合宿（2年目）にて', '夏合宿(2年目)にて', '初詣', '新年の抱負',
@@ -124,6 +125,8 @@ KNOWN_OVERRIDES = {
     ('勝利の味ってヤツ！', 1048): '勝利の味ってヤツ!',
     ('殿下と映画鑑賞会', 1022): '殿下と映画観賞会',
     ('言葉+……', 1033): '言葉＋……',
+    ('未来が分かる魔法かも？', 1074): '未来がわかる魔法かも？',
+    ('支えられて、見守られて', 1074): '支えらえて、見守られて', # ... lol
     ('『全力』&『普通』ダイエット！', None): '『全力』＆『普通』ダイエット！',
 }
 
@@ -209,6 +212,7 @@ def match_events(cursor: sqlite3.Cursor, gw_data):
 
     unused_known_overrides = set(KNOWN_OVERRIDES.keys())
     result = {}
+    low_priority_result = {}
 
     for row in gw_data:
         event_name = unicodedata.normalize('NFC', row['e'])
@@ -219,28 +223,31 @@ def match_events(cursor: sqlite3.Cursor, gw_data):
 
         event_chara_name = re.sub(r'\(.+\)', "", row['n'])  # remove things like `(新衣装)`
         m = re.search('[\u30A0-\u30FF]+', event_chara_name)
-        if m:
-            # If it contains some Katakana, just remove all non Katakana chars
-            event_chara_name = m[0]
-        if event_chara_name not in chara_names and event_chara_name not in EXCLUDED_EVENT_CHARA_NAMES:
-            logging.warning('Detected unknown event_chara: %s' % row)
+        if event_chara_name not in EXCLUDED_EVENT_CHARA_NAMES and event_chara_name not in LOW_PRIORITY_CHARA_NAMES:
+            if m:
+                # If it contains some Katakana, just remove all non Katakana chars
+                event_chara_name = m[0]
+            if event_chara_name not in chara_names:
+                logging.warning('Detected unknown event_chara: %s' % row)
         chara_id = chara_names.get(event_chara_name)
 
         if event_name in EXCLUDED_EVENT_NAMES or (event_name, chara_id) in PER_CHARA_EXCLUDE_EVENTS:
             continue
 
+        to_update = low_priority_result if event_chara_name in LOW_PRIORITY_CHARA_NAMES else result
+
         story_ids = try_match_event(cursor, event_name, chara_id, unused_known_overrides)
         for story_id in story_ids:
-            if story_id in result:
+            if story_id in to_update:
                 # Because upstream uses separate entries for support cards R vs SR vs SSR, or different 勝負服 of the same chara.
                 # For now there is no case where the choices are different than each other, so just ignore.
                 pass
-            result[story_id] = row
+            to_update[story_id] = row
 
     if len(unused_known_overrides) > 0:
         logging.warning('Unused KNOWN_OVERRIDES: %s', unused_known_overrides)
 
-    return result
+    return low_priority_result | result
 
 
 text_formatter = lambda text: text.replace('[br]', '\n').replace('<hr>', '\n')
