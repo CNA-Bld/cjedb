@@ -125,7 +125,6 @@ KNOWN_OVERRIDES = {
     ('推しみない愛を推しに！', 1019): '“推し”みない愛を推しに！',
     ('Search  or Mommy', 1045): 'Search or Mommy',
     ('シチーガールの今の気分♪', 1040): '“シチーガール”の今の気分♪',
-    ('勝利の味ってヤツ！', 1048): '勝利の味ってヤツ!',
     ('殿下と映画鑑賞会', 1022): '殿下と映画観賞会',
     ('言葉+……', 1033): '言葉＋……',
     ('支えられて、見守られて', 1074): '支えらえて、見守られて', # ... lol
@@ -162,7 +161,7 @@ def read_chara_names(cursor: sqlite3.Cursor) -> dict[str, int]:
 def try_match_event(cursor: sqlite3.Cursor, event_name: str, chara_id: Optional[int], unused_known_overrides: set) \
         -> list[int]:
     original_event_name = event_name
-     # Currently no events use these replaced chars
+    # Currently no events use these replaced chars
     event_name = event_name.replace('･', '・').replace('~', '～').replace('(', '（').replace(')', '）')
     for suffix in EVENT_NAME_SUFFIX_TO_REMOVE:
         event_name = event_name.removesuffix(suffix)
