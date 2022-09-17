@@ -17,7 +17,7 @@ UPSTREAM_DATA_URL = 'https://gamewith-tool.s3-ap-northeast-1.amazonaws.com/uma-m
 UPSTREAM_DATA_HEADER = '''window.eventDatas['男'] = ['''
 UPSTREAM_DATA_FOOTER = '];'
 
-EXCLUDED_EVENT_CHARA_NAMES = {'共通', 'URA', 'アオハル', 'クライマックス'}
+EXCLUDED_EVENT_CHARA_NAMES = {'共通', 'URA', 'アオハル', 'クライマックス', 'グランドライブ'}
 LOW_PRIORITY_CHARA_NAMES = {'チーム＜シリウス＞', '玉座に集いし者たち'}
 
 EXCLUDED_EVENT_NAMES = {
@@ -79,6 +79,9 @@ PERMITTED_DUPLICATED_EVENTS = {
 
     # Aoharu, team name
     ('ついに集まったチームメンバー！', None): {400002204, 400002217, 400002444},
+
+    # Grand Live
+    ('あなたと私をつなげるライブ', None): {400003202, 400003231},
 }
 
 DUPLICATED_EVENTS_DEDUPE = {
@@ -139,7 +142,14 @@ KNOWN_OVERRIDES = {
     ('Currens Black', 1038): 'Curren\'s Black',
     ('怒涛の恩返しラッシュ', 1034): '怒濤の恩返しラッシュ',
     ('教訓之二:決して撮影を諦めるな', 1010): '教訓之二：決して撮影を諦めるな',
+    ('チケゾ―配達日記〜蒸気編〜', 1035): 'チケゾー配達日記～蒸気編～',
+    ('チケゾ―配達日記〜学園編〜', 1035): 'チケゾー配達日記～学園編～',
+    ('クエスト:撤去作業のお手伝い！', 1050): 'クエスト：撤去作業のお手伝い！',
+    ('クエスト:演劇部のお手伝い！', 1050): 'クエスト：演劇部のお手伝い！',
+    ('"シチーガール"になるために', 1029): '“シチーガール”になるために',
+    ('お疲れさまです……！', 9008): 'お疲れ様です……！',
     ('『全力』&『普通』ダイエット！', None): '『全力』＆『普通』ダイエット！',
+    ('あなたと私を繋げるライブ', None): 'あなたと私をつなげるライブ',
 }
 
 

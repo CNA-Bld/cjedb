@@ -8,8 +8,8 @@ put [cjedb.json](https://github.com/CNA-Bld/cjedb/raw/master/cjedb.json) into `u
 
 ## Schema
 
-Schema is defined by [cjedb.proto](cjedb.proto). Run `protoc --python_out=. *.proto` to update the generated Python
-code.
+Schema is defined by [cjedb.proto](cjedb.proto). Run `protoc --python_out=. --pyi_out=. *.proto` to update the generated
+Python code.
 
 Although schema is defined as a protobuf, currently proto3 JSON is used as the data exchange format.
 
