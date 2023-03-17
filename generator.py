@@ -17,7 +17,7 @@ UPSTREAM_DATA_URL = 'https://gamewith-tool.s3-ap-northeast-1.amazonaws.com/uma-m
 UPSTREAM_DATA_HEADER = '''window.eventDatas['男'] = ['''
 UPSTREAM_DATA_FOOTER = '];'
 
-EXCLUDED_EVENT_CHARA_NAMES = {'共通', 'URA', 'アオハル', 'クライマックス', 'グランドライブ'}
+EXCLUDED_EVENT_CHARA_NAMES = {'共通', 'URA', 'アオハル', 'クライマックス', 'グランドライブ', 'グランドマスターズ'}
 LOW_PRIORITY_CHARA_NAMES = {'チーム＜シリウス＞', '玉座に集いし者たち'}
 
 EXCLUDED_EVENT_NAMES = {
@@ -82,6 +82,9 @@ PERMITTED_DUPLICATED_EVENTS = {
 
     # Grand Live
     ('あなたと私をつなげるライブ', None): {400003202, 400003231},
+
+    # Grand Masters
+    ('今を駆ける者たちの祖', None): {400005105, 400005430},
 }
 
 DUPLICATED_EVENTS_DEDUPE = {
@@ -147,6 +150,10 @@ KNOWN_OVERRIDES = {
     ('"シチーガール"になるために', 1029): '“シチーガール”になるために',
     ('風は自由', 1078): '風は、自由',
     ('てきぱき&のびのび', 1100): 'てきぱき＆のびのび',
+    ('悪童、あくなき探究へ', 1043): '悪童、あくなき探求へ',
+    ('追いつ追われつ（チェイス）は上等', 1094): '“追いつ追われつ”（チェイス）は上等',
+    ('闘叫（トーキョー）の鬼', 1094): '“闘叫”（トーキョー）の鬼',
+    ('魔術（マジック）みてぇに', 1094): '“魔術”（マジック）みてぇに',
     ('お疲れさまです……！', 9008): 'お疲れ様です……！',
     ('『全力』&『普通』ダイエット！', None): '『全力』＆『普通』ダイエット！',
     ('あなたと私を繋げるライブ', None): 'あなたと私をつなげるライブ',
