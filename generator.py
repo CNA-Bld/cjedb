@@ -18,7 +18,7 @@ UPSTREAM_DATA_HEADER = '''window.eventDatas['男'] = ['''
 UPSTREAM_DATA_FOOTER = '];'
 
 EXCLUDED_EVENT_CHARA_NAMES = {'共通', 'URA', 'アオハル', 'クライマックス', 'グランドライブ', 'グランドマスターズ'}
-LOW_PRIORITY_CHARA_NAMES = {'チーム＜シリウス＞', '玉座に集いし者たち'}
+LOW_PRIORITY_CHARA_NAMES = {'チーム＜シリウス＞', '玉座に集いし者たち', '祖にして導く者'}
 
 EXCLUDED_EVENT_NAMES = {
     '追加の自主トレ', '夏合宿（2年目）にて', '夏合宿(2年目)にて', '初詣', '新年の抱負',
