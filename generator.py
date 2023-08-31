@@ -17,7 +17,7 @@ UPSTREAM_DATA_URL = 'https://gamewith-tool.s3-ap-northeast-1.amazonaws.com/uma-m
 UPSTREAM_DATA_HEADER = '''window.eventDatas['男'] = ['''
 UPSTREAM_DATA_FOOTER = '];'
 
-EXCLUDED_EVENT_CHARA_NAMES = {'共通', 'URA', 'アオハル', 'クライマックス', 'グランドライブ', 'グランドマスターズ'}
+EXCLUDED_EVENT_CHARA_NAMES = {'共通', 'URA', 'アオハル', 'クライマックス', 'グランドライブ', 'グランドマスターズ', 'プロジェクトL’Arc'}
 LOW_PRIORITY_CHARA_NAMES = {'チーム＜シリウス＞', '玉座に集いし者たち', '祖にして導く者'}
 
 EXCLUDED_EVENT_NAMES = {
@@ -29,7 +29,7 @@ EXCLUDED_EVENT_NAMES = {
     'チーム＜ファースト＞の宣戦布告', 'ついに集まったチームメンバー！',  # Aoharu only
 }
 
-EVENT_NAME_SUFFIX_TO_REMOVE = {'（お出かけ2）', '（お出かけ3）', '（Rお出かけ3）'}
+EVENT_NAME_SUFFIX_TO_REMOVE = {'（お出かけ2）', '（お出かけ3）', '（Rお出かけ3）', '（パリの街にて）', '（その日を信じて）', '（温かなメッセージ）'}
 
 PER_CHARA_EXCLUDE_EVENTS = {
     ('夏合宿(3年目)終了', 1007),  # ゴルシ, wrong event name, but no one else has this choice, and the choice does nothing
@@ -85,6 +85,9 @@ PERMITTED_DUPLICATED_EVENTS = {
 
     # Grand Masters
     ('今を駆ける者たちの祖', None): {400005105, 400005430},
+
+    # L'Arc
+    ('With', None): {400006005, 400006404},
 }
 
 DUPLICATED_EVENTS_DEDUPE = {
@@ -95,6 +98,9 @@ DUPLICATED_EVENTS_DEDUPE = {
     # For マヤノ, this behaves the same to the normal one and is excluded above by PER_CHARA_EXCLUDE_EVENTS
     # For タマ, this is the special one during バ群を怖がる期間
     ('レース勝利', 1021): ({501021734, 501024724}, [501021734]),
+
+    # 1077 ナリタトップロード, 30018 [まだ小さな蕾でも]ニシノフラワー
+    ('私にできること', 1077): ({501077513, 830018001}, [501077513]),
 }
 
 KNOWN_OVERRIDES = {
@@ -148,12 +154,12 @@ KNOWN_OVERRIDES = {
     ('クエスト:撤去作業のお手伝い！', 1050): 'クエスト：撤去作業のお手伝い！',
     ('クエスト:演劇部のお手伝い！', 1050): 'クエスト：演劇部のお手伝い！',
     ('"シチーガール"になるために', 1029): '“シチーガール”になるために',
-    ('風は自由', 1078): '風は、自由',
     ('てきぱき&のびのび', 1100): 'てきぱき＆のびのび',
     ('悪童、あくなき探究へ', 1043): '悪童、あくなき探求へ',
     ('追いつ追われつ（チェイス）は上等', 1094): '“追いつ追われつ”（チェイス）は上等',
     ('闘叫（トーキョー）の鬼', 1094): '“闘叫”（トーキョー）の鬼',
     ('魔術（マジック）みてぇに', 1094): '“魔術”（マジック）みてぇに',
+    ('誠心誠意、感謝を込めて', 1063): '誠心誠意、感謝をこめて',
     ('お疲れさまです……！', 9008): 'お疲れ様です……！',
     ('『全力』&『普通』ダイエット！', None): '『全力』＆『普通』ダイエット！',
     ('あなたと私を繋げるライブ', None): 'あなたと私をつなげるライブ',
@@ -253,7 +259,7 @@ def match_events(cursor: sqlite3.Cursor, gw_data):
         event_chara_name = re.sub(r'\(.+\)', "", row['n'])  # remove things like `(新衣装)`
         m = re.search('[\u30A0-\u30FF]+', event_chara_name)
         if event_chara_name not in EXCLUDED_EVENT_CHARA_NAMES and event_chara_name not in LOW_PRIORITY_CHARA_NAMES:
-            if m:
+            if m and event_chara_name != '佐岳メイ':
                 # If it contains some Katakana, just remove all non Katakana chars
                 event_chara_name = m[0]
             if event_chara_name not in chara_names:
@@ -278,6 +284,7 @@ def match_events(cursor: sqlite3.Cursor, gw_data):
 
     return low_priority_result | result
 
+title_formatter = lambda title: title.replace('<hr><span class=\"sub-info\">L’Arcで発生時：</span><br>', '\n')
 
 text_formatter = lambda text: text.replace('[br]', '\n').replace('<hr>', '\n')
 
@@ -289,7 +296,7 @@ def convert_to_proto(events: dict, include_name: bool) -> cjedb_pb2.Database:
         e.story_id = k
         for choice in v['choices']:
             c = cjedb_pb2.Event.Choice()
-            c.title = choice['n']
+            c.title = title_formatter(choice['n'])
             c.text = text_formatter(choice['t'])
             e.choices.append(c)
         if include_name:
